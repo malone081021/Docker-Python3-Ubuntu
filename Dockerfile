@@ -36,6 +36,17 @@ RUN apt-get -qq -y update && \
         bash-completion \
         tree \
         vim \
+		exiv2 \
+		python3-dev \
+		libexiv2-dev \
+		libboost-python-dev \
+		libmediainfo-dev \
+		python3-pip \
+		libkrb5-dev \
+		openssh-server \
+		ffmpeg \
+		zip \
+		libaio1 \
         software-properties-common && \
     mv /usr/bin/lsb_release /usr/bin/lsb_release.bak && \
     apt-get -y autoclean && \
