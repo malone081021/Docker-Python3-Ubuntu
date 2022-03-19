@@ -2,17 +2,16 @@ FROM ubuntu:20.04
 
 USER root
 WORKDIR /root
-
 SHELL [ "/bin/bash", "-c" ]
 
-ARG PYTHON_VERSION_TAG=3.9.10
+ARG PYTHON_VERSION_TAG=3.8.10
 ARG LINK_PYTHON_TO_PYTHON3=1
 
 # Existing lsb_release causes issues with modern installations of Python3
 # https://github.com/pypa/pip/issues/4924#issuecomment-435825490
 # Set (temporarily) DEBIAN_FRONTEND to avoid interacting with tzdata
-RUN apt-get -qq -y update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
+RUN apt-get -qq -y update \
+  &&  DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
         gcc \
         g++ \
         zlibc \
@@ -36,17 +35,17 @@ RUN apt-get -qq -y update && \
         bash-completion \
         tree \
         vim \
-		exiv2 \
-		python3-dev \
-		libexiv2-dev \
-		libboost-python-dev \
-		libmediainfo-dev \
-		python3-pip \
-		libkrb5-dev \
-		openssh-server \
-		ffmpeg \
-		zip \
-		libaio1 \
+	exiv2 \
+	python3-dev \
+	libexiv2-dev \
+	libboost-python-dev \
+	libmediainfo-dev \
+	python3-pip \
+	libkrb5-dev \
+	openssh-server \
+	ffmpeg \
+	zip \
+	libaio1 \
         software-properties-common && \
     mv /usr/bin/lsb_release /usr/bin/lsb_release.bak && \
     apt-get -y autoclean && \
@@ -64,23 +63,23 @@ RUN export SED_RANGE="$(($(sed -n '\|enable bash completion in interactive shell
     unset SED_RANGE
 
 # Create user "docker" with sudo powers
-RUN useradd -m docker && \
-    usermod -aG sudo docker && \
-    echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
-    cp /root/.bashrc /home/docker/ && \
-    mkdir /home/docker/data && \
-    chown -R --from=root docker /home/docker
+#RUN useradd -m docker && \
+#    usermod -aG sudo docker && \
+#    echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+#    cp /root/.bashrc /home/docker/ && \
+#    mkdir /home/docker/data && \
+#    chown -R --from=root docker /home/docker
 
 # Use C.UTF-8 locale to avoid issues with ASCII encoding
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-WORKDIR /home/docker/data
-ENV HOME /home/docker
-ENV USER docker
-USER docker
-ENV PATH /home/docker/.local/bin:$PATH
+#WORKDIR /home/docker/data
+ENV HOME /root
+#ENV USER docker
+#USER docker
+#ENV PATH /home/docker/.local/bin:$PATH
 # Avoid first use of sudo warning. c.f. https://askubuntu.com/a/22614/781671
-RUN touch $HOME/.sudo_as_admin_successful
+#RUN touch $HOME/.sudo_as_admin_successful
 
 CMD [ "/bin/bash" ]
